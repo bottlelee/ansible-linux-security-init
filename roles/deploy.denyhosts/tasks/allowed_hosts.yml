@@ -1,0 +1,35 @@
+- block:
+    - name: Getting current public IP
+      shell: curl icanhazip.com || curl ipecho.net/plain || curl ifconfig.co || curl ifconfig.me
+      changed_when: false
+      register: current_ip
+      delegate_to: localhost
+      run_once: yes
+  rescue:
+    - name: Installing curl
+      package:
+        name: curl
+    - include_tasks: allowed_hosts.yml
+  when: controller_public_ip is not defined
+
+- set_fact:
+    controller_public_ip: "{{ current_ip.stdout }}"
+
+- debug:
+    msg: "Local machine's public IP is {{ controller_public_ip }}"
+
+- block:
+    - name: Updating hosts allowed list
+      template:
+        src: allowed-hosts.j2
+        dest: /var/lib/denyhosts/allowed-hosts
+      notify: Restart denyhosts
+  rescue:
+    - name: Creating /var/lib/denyhosts/
+      file:
+        path: /var/lib/denyhosts/
+        state: directory
+        owner: root
+        group: root
+        mode: 0700
+    - include_tasks: allowed_hosts.yml

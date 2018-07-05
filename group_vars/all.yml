@@ -1,0 +1,11 @@
+# denyhosts white list.
+denyhosts_allowed_hosts: ["192.168.1.1", "192.168.100.1"]
+
+denyhosts_settings:
+  - ["PURGE_DENY", "10m"]
+  - ["ADMIN_EMAIL", "root@localhost"]
+  - ["SMTP_HOST", "localhost"]
+  - ["SMTP_PORT", "25"]
+  - ["SYNC_SERVER", "http://xmlrpc.denyhosts.net:9911"]
+  - ["SYNC_UPLOAD", "yes"]
+  - ["SYNC_DOWNLOAD", "yes"]

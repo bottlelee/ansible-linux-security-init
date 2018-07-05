@@ -1,0 +1,25 @@
+- block:
+    - name: Checking denyhosts status
+      service:
+        name: denyhosts
+        state: started
+  rescue:
+    - include_tasks: allowed_hosts.yml
+    - name: Installing denyhosts
+      package:
+        name: denyhosts
+
+- include_tasks: allowed_hosts.yml
+
+- name: Updating /etc/denyhosts.conf
+  lineinfile:
+    path: /etc/denyhosts.conf
+    regexp: "^{{ item[0] }}"
+    line: "{{ item[0] }} = {{ item[1] }}"
+    insertbefore: BOF
+    owner: root
+    group: root
+    mode: 0600
+  with_items:
+    - "{{ denyhosts_settings }}"
+  notify: Restart denyhosts

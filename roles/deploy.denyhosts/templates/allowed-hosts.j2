@@ -1,0 +1,8 @@
+# We mustn't block localhost
+127.0.0.1
+
+# Custom white list
+{{ controller_public_ip }}
+{% for item in denyhosts_allowed_hosts | sort %}
+{{ item }}
+{% endfor %}
