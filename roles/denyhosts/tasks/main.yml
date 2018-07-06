@@ -3,6 +3,7 @@
       service:
         name: denyhosts
         state: started
+      changed_when: false
   rescue:
     - include_tasks: allowed_hosts.yml
     - name: Installing denyhosts
@@ -12,14 +13,10 @@
 - include_tasks: allowed_hosts.yml
 
 - name: Updating /etc/denyhosts.conf
-  lineinfile:
-    path: /etc/denyhosts.conf
-    regexp: "^{{ item[0] }}"
-    line: "{{ item[0] }} = {{ item[1] }}"
-    insertbefore: BOF
+  template:
+    src: denyhosts.conf.j2
+    dest: /etc/denyhosts.conf
     owner: root
     group: root
     mode: 0600
-  with_items:
-    - "{{ denyhosts_settings }}"
   notify: Restart denyhosts

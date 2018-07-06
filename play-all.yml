@@ -3,4 +3,4 @@
   any_errors_fatal: yes
   serial: 10
   roles:
-    - deploy.denyhosts
+    - denyhosts
