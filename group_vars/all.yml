@@ -1,4 +1,11 @@
-# denyhosts white list.
+## denyhosts white list.
 denyhosts_allowed_hosts:
   - 192.168.1.1
   - 192.168.100.1
+
+## ssh extra args
+## Read more on https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html#list-of-behavioral-inventory-parameters
+ansible_ssh_extra_args: '-o ControlMaster=auto -o ConnectionAttempts=10 -o UserKnownHostsFile=/dev/null'
+
+## uncomment below and edit to suit your environment if you have a jump host
+# ansible_ssh_common_args: '-o ProxyCommand="ssh -p 22 -W %h:%p -q root@127.0.0.1"'

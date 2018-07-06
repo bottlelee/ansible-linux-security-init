@@ -26,20 +26,20 @@ Vagrant.configure("2") do |config|
     config.proxy.no_proxy = $no_proxy
   end
 
-  config.vm.define vm_name = "security-test" do |config|
-    config.vm.hostname = "security-test"
+  config.vm.define vm_name = "denyhost" do |config|
+    config.vm.hostname = "denyhost"
     config.vm.network "private_network", ip: "172.28.128.10"
 
     config.vm.provider "virtualbox" do |vb|
       vb.customize ["modifyvm", :id, "--natdnshostresolver1", "off"]
       vb.customize ["modifyvm", :id, "--natdnsproxy1", "off"]
-      vb.name = "security-test"
+      vb.name = "denyhost"
       vb.memory = "512"
       vb.cpus = "1"
     end
 
     config.vm.provision "ansible" do |ansible|
-      # ansible.inventory_path = "./vagrant_hosts.ini"
+      ansible.inventory_path = "./vagrant_hosts.ini"
       ansible.limit = "all"
       ansible.playbook = "play-all.yml"
     end
